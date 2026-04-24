@@ -35,9 +35,9 @@ An interactive, web-based tactical mapping tool designed specifically for Crossf
 * Added Offense (BL) vs Defense (GR) toggle for accurate token colors.
 * Added Molotov utility token.
 * Added Text Annotation feature.
-* Added Undo functionality (Ctrl+Z) for the drawing tool.
+* Added Undo functionality (Ctrl+Z) for the drawing tool and utilities.
 
 **[April 24, 2026] - Initial Release**
 * Launched static web application on GitHub Pages.
-* Added Black Widow (CFS) map.
-* Implemented core dragging and freehand drawing mechanics.
+* Added CFL maps.
+
