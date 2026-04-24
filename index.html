@@ -3,115 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CF Tactical MAPPINGS</title>
+    <title>CF Legends Tactical MAPPINGS</title>
     <style>
         :root {
             --bg: #0f0f0f;
             --panel: #1a1a1a;
             --accent: #ffb400;
-            --bl-side: #e74c3c;
-            --gr-side: #3498db;
+            --bl-side: #e74c3c; /* Red */
+            --gr-side: #3498db; /* Blue */
         }
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: var(--bg); 
-            color: white; 
-            margin: 0; 
-            display: flex; 
-            height: 100vh; 
-            overflow: hidden; 
-        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; display: flex; height: 100vh; overflow: hidden; }
 
         /* Sidebar */
-        #sidebar {
-            width: 300px; 
-            height: 100vh; 
-            background: var(--panel);
-            padding: 20px; 
-            box-sizing: border-box; 
-            border-right: 1px solid #333;
-            overflow-y: auto; 
-            z-index: 100; 
-            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-        }
-
-        /* Map Area */
-        #map-viewport { 
-            flex-grow: 1; 
-            position: relative; 
-            background: #000; 
-            overflow: hidden; 
-            background-size: contain; 
-            background-repeat: no-repeat; 
-            background-position: center; 
-        }
-        
-        canvas { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            cursor: crosshair; 
-        }
+        #sidebar { width: 300px; height: 100vh; background: var(--panel); padding: 20px; box-sizing: border-box; border-right: 1px solid #333; overflow-y: auto; z-index: 100; box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
+        #map-viewport { flex-grow: 1; position: relative; background: #000; overflow: hidden; background-size: contain; background-repeat: no-repeat; background-position: center; }
+        canvas { position: absolute; top: 0; left: 0; cursor: crosshair; }
 
         .section { margin-bottom: 15px; padding: 12px; background: #252525; border-radius: 6px; border: 1px solid #333; }
         h3 { margin: 0 0 10px 0; font-size: 12px; letter-spacing: 1px; color: var(--accent); border-bottom: 1px solid #444; padding-bottom: 5px; }
 
-        select, button {
-            width: 100%; padding: 10px; margin: 4px 0; border-radius: 4px;
-            border: none; background: #3d3d3d; color: white; cursor: pointer; font-weight: bold;
-        }
+        select, button { width: 100%; padding: 10px; margin: 4px 0; border-radius: 4px; border: none; background: #3d3d3d; color: white; cursor: pointer; font-weight: bold; transition: 0.1s; }
         button:hover { background: #505050; }
 
-        /* Specialized Buttons */
+        /* Buttons */
         .btn-bl { background: var(--bl-side); }
         .btn-gr { background: var(--gr-side); }
         .btn-clear { background: #555; font-size: 11px; }
         .btn-danger { background: #8e1a1a; margin-top: 20px; }
 
-        /* Utility Spawner Grid */
+        /* Spawner Grid */
         .util-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-        .spawn-item {
-            padding: 10px; text-align: center; font-size: 11px; border: 1px solid #444;
-            cursor: pointer; border-radius: 4px; transition: transform 0.1s;
-            font-weight: bold;
-        }
+        .spawn-item { padding: 10px; text-align: center; font-size: 11px; border: 1px solid #444; cursor: pointer; border-radius: 4px; font-weight: bold; }
         .spawn-item:active { transform: scale(0.95); }
 
-        /* --- DRAGGABLE TOKENS CSS --- */
-        .token {
-            position: absolute;
-            cursor: grab; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            font-weight: 800; 
-            font-size: 11px; 
-            border: 2px solid #fff; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.6); 
-            z-index: 10; 
-            user-select: none;
-            transform: translate(-50%, -50%); /* Centers the token on the mouse */
-        }
+        /* Tokens */
+        .token { position: absolute; cursor: grab; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px; border: 2px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.6); z-index: 10; user-select: none; transform: translate(-50%, -50%); }
         .token:active { cursor: grabbing; }
         
-        /* Player Tokens */
         .player-token { width: 36px; height: 36px; border-radius: 50%; }
         .bl-token { background: var(--bl-side); }
         .gr-token { background: var(--gr-side); }
         
-        /* Utility Tokens */
         .util-token { border-radius: 4px; padding: 5px 10px; }
         .smoke-cloud { width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.7); border: 2px dashed #000; color: #000; }
         .flash-token { background: #f1c40f; color: #000; }
         .he-token { background: #d35400; }
         .molly-token { background: #e67e22; }
         .c4-token { background: #c0392b; border: 2px solid #ff0000; }
+        
+        /* New Text Token */
+        .text-token { background: rgba(0,0,0,0.6); border: 1px dashed var(--accent); color: var(--accent); padding: 5px 10px; border-radius: 4px; font-size: 13px; font-weight: bold; text-shadow: 1px 1px 2px #000; white-space: nowrap; }
     </style>
 </head>
 <body>
 
 <div id="sidebar">
-    <h2 style="margin:0 0 20px 0; color:var(--accent); text-align:center;">CFS Impact tactical mappings</h2>
+    <h2 style="margin:0 0 20px 0; color:var(--accent); text-align:center;">CF Legends Tactical Mappings</h2>
 
     <div class="section">
         <h3>1. MAP SELECT</h3>
@@ -130,13 +77,15 @@
 
     <div class="section">
         <h3>2. TEAM SETUP</h3>
+        <button id="sideToggleBtn" class="btn-bl" onclick="toggleSide()" style="margin-bottom: 10px;">MODE: OFFENSE (BLACK LIST)</button>
+        
         <div class="util-grid">
-            <button class="btn-bl" onclick="spawnToken('Enemy', 'player-token bl-token')">+ Enemy team</button>
-            <button class="btn-gr" onclick="spawnToken('IGL', 'player-token gr-token')">+ IGL</button>
-            <button class="btn-gr" onclick="spawnToken('SNR', 'player-token gr-token')">+ SNIPER</button>
-            <button class="btn-gr" onclick="spawnToken('LURK', 'player-token gr-token')">+ LURK</button>
-            <button class="btn-gr" onclick="spawnToken('SUP', 'player-token gr-token')">+ SUPPORT</button>
-            <button class="btn-gr" onclick="spawnToken('ENT', 'player-token gr-token')">+ ENTRY</button>
+            <button style="background: #333;" onclick="spawnPlayer('Enemy', true)">+ Enemy</button>
+            <button style="background: #555;" onclick="spawnPlayer('IGL', false)">+ IGL</button>
+            <button style="background: #555;" onclick="spawnPlayer('SNR', false)">+ SNIPER</button>
+            <button style="background: #555;" onclick="spawnPlayer('LURK', false)">+ LURK</button>
+            <button style="background: #555;" onclick="spawnPlayer('SUP', false)">+ SUPPORT</button>
+            <button style="background: #555;" onclick="spawnPlayer('ENT', false)">+ ENTRY</button>
         </div>
         <button class="btn-clear" style="margin-top: 10px;" onclick="clearTokens('player-token')">Clear All Players</button>
     </div>
@@ -147,16 +96,18 @@
             <div class="spawn-item" style="background: #95a5a6; color: #000;" onclick="spawnToken('SMOKE', 'smoke-cloud')">SMOKE</div>
             <div class="spawn-item" style="background: #f1c40f; color: #000;" onclick="spawnToken('FLASH', 'util-token flash-token')">FLASH</div>
             <div class="spawn-item" style="background: #d35400;" onclick="spawnToken('HE', 'util-token he-token')">HE</div>
-            
             <div class="spawn-item" style="background: #e67e22;" onclick="spawnToken('MOLLY', 'util-token molly-token')">MOLOTOV</div>
-            
             <div class="spawn-item" style="background: #c0392b; grid-column: span 2; border: 2px solid #ff0000;" onclick="spawnToken('C4', 'util-token c4-token')">BOMB (C4)</div>
         </div>
         <button class="btn-clear" style="margin-top: 10px;" onclick="clearTokens('util-token', 'smoke-cloud')">Clear All Utility</button>
     </div>
 
     <div class="section">
-        <h3>4. DRAWING TOOL</h3>
+        <h3>4. DRAWING & NOTES</h3>
+        <div class="util-grid">
+            <button class="btn-clear" onclick="addTextAnnotation()">+ Text Note</button>
+            <button class="btn-clear" onclick="undoDraw()">Undo (Ctrl+Z)</button>
+        </div>
         <button class="btn-clear" onclick="clearDrawings()">Clear Drawings</button>
     </div>
 
@@ -169,42 +120,61 @@
 
 <script>
     const mapViewport = document.getElementById('map-viewport');
-
-    // 1. Map Selection Logic
-    function updateMap() {
-        const select = document.getElementById('mapSelect');
-        const selectedMap = select.value;
-
-        if (selectedMap) {
-            mapViewport.style.backgroundImage = `url('${selectedMap}')`;
+    
+    // --- SIDE TOGGLE LOGIC ---
+    let currentSide = 'BL'; // Defaults to Black List (Offense)
+    
+    function toggleSide() {
+        const btn = document.getElementById('sideToggleBtn');
+        if (currentSide === 'BL') {
+            currentSide = 'GR';
+            btn.className = 'btn-gr';
+            btn.innerText = 'MODE: DEFENSE (GLOBAL RISK)';
         } else {
-            mapViewport.style.backgroundImage = 'none';
+            currentSide = 'BL';
+            btn.className = 'btn-bl';
+            btn.innerText = 'MODE: OFFENSE (BLACK LIST)';
         }
     }
 
-    // 2. Drawing Canvas Logic
+    function spawnPlayer(role, isEnemy) {
+        let colorClass = '';
+        if (currentSide === 'BL') {
+            colorClass = isEnemy ? 'gr-token' : 'bl-token';
+        } else {
+            colorClass = isEnemy ? 'bl-token' : 'gr-token';
+        }
+        spawnToken(role, `player-token ${colorClass}`);
+    }
+
+    function updateMap() {
+        const select = document.getElementById('mapSelect');
+        if (select.value) mapViewport.style.backgroundImage = `url('${select.value}')`;
+        else mapViewport.style.backgroundImage = 'none';
+    }
+
+    // --- DRAWING & UNDO LOGIC ---
     const canvas = document.getElementById('tacticalCanvas');
     const ctx = canvas.getContext('2d');
+    let drawHistory = [];
 
     function resizeCanvas() {
         canvas.width = mapViewport.clientWidth;
         canvas.height = mapViewport.clientHeight;
+        saveDrawState(); // Save initial blank state
     }
-
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
     let isDrawing = false;
-    let currentX = 0;
-    let currentY = 0;
+    let currentX = 0, currentY = 0;
 
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mouseout', stopDrawing);
+    canvas.addEventListener('mouseout', () => { if(isDrawing) stopDrawing(); });
 
     function startDrawing(e) {
-        // Prevent drawing if we are clicking on a draggable token
         if (e.target.classList.contains('token')) return; 
         isDrawing = true;
         [currentX, currentY] = getMousePos(e);
@@ -213,21 +183,21 @@
     function draw(e) {
         if (!isDrawing) return;
         const [newX, newY] = getMousePos(e);
-
         ctx.beginPath();
         ctx.moveTo(currentX, currentY);
         ctx.lineTo(newX, newY);
-        ctx.strokeStyle = '#00ff00'; // Green drawing color
+        ctx.strokeStyle = '#00ff00';
         ctx.lineWidth = 3;
         ctx.lineCap = 'round';
         ctx.stroke();
-
-        currentX = newX;
-        currentY = newY;
+        currentX = newX; currentY = newY;
     }
 
     function stopDrawing() {
-        isDrawing = false;
+        if (isDrawing) {
+            isDrawing = false;
+            saveDrawState(); // Save the canvas after every drawn line
+        }
     }
 
     function getMousePos(e) {
@@ -235,53 +205,72 @@
         return [e.clientX - rect.left, e.clientY - rect.top];
     }
 
-    function clearDrawings() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function saveDrawState() {
+        drawHistory.push(canvas.toDataURL());
+        if (drawHistory.length > 20) drawHistory.shift(); // Keep only last 20 steps to save memory
     }
 
-    // 3. Token Spawning & Dragging Logic
+    function undoDraw() {
+        if (drawHistory.length > 1) {
+            drawHistory.pop(); // Remove current state
+            const imgData = drawHistory[drawHistory.length - 1]; // Get previous state
+            const img = new Image();
+            img.src = imgData;
+            img.onload = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            };
+        } else {
+            clearDrawings(); // If only 1 state left, clear it
+        }
+    }
+
+    // Bind Ctrl+Z to Undo
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'z') undoDraw();
+    });
+
+    function clearDrawings() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawHistory = [];
+        saveDrawState();
+    }
+
+    // --- TOKEN LOGIC (Including Text Annotations) ---
     let activeToken = null;
-    let offsetX = 0;
-    let offsetY = 0;
+    let offsetX = 0, offsetY = 0;
 
     function spawnToken(text, className) {
         const token = document.createElement('div');
         token.className = `token ${className}`;
         token.innerText = text;
-        
-        // Spawn in the center of the map viewport
         token.style.left = '50%';
         token.style.top = '50%';
-
-        // Add mouse down listener to pick it up
         token.addEventListener('mousedown', startDrag);
-
         mapViewport.appendChild(token);
+    }
+
+    function addTextAnnotation() {
+        const text = prompt("Enter your map annotation:");
+        if (text && text.trim() !== "") {
+            spawnToken(text, 'text-token');
+        }
     }
 
     function startDrag(e) {
         activeToken = e.target;
         const rect = activeToken.getBoundingClientRect();
-        
-        // Calculate where on the token the user clicked so it doesn't snap to the center
         offsetX = e.clientX - rect.left - (rect.width / 2);
         offsetY = e.clientY - rect.top - (rect.height / 2);
-        
         document.addEventListener('mousemove', dragToken);
         document.addEventListener('mouseup', stopDrag);
     }
 
     function dragToken(e) {
         if (!activeToken) return;
-        
         const viewportRect = mapViewport.getBoundingClientRect();
-        
-        // Calculate new X and Y relative to the map viewport
-        let newX = e.clientX - viewportRect.left - offsetX;
-        let newY = e.clientY - viewportRect.top - offsetY;
-
-        activeToken.style.left = `${newX}px`;
-        activeToken.style.top = `${newY}px`;
+        activeToken.style.left = `${e.clientX - viewportRect.left - offsetX}px`;
+        activeToken.style.top = `${e.clientY - viewportRect.top - offsetY}px`;
     }
 
     function stopDrag() {
@@ -290,21 +279,17 @@
         document.removeEventListener('mouseup', stopDrag);
     }
 
-    // 4. Clearing Logic
     function clearTokens(...classNames) {
-        classNames.forEach(className => {
-            const tokens = document.querySelectorAll(`.${className}`);
-            tokens.forEach(t => t.remove());
-        });
+        classNames.forEach(c => document.querySelectorAll(`.${c}`).forEach(t => t.remove()));
+        document.querySelectorAll('.text-token').forEach(t => t.remove()); // Clears text too
     }
 
     function fullReset() {
         clearDrawings();
-        clearTokens('token'); // Clears everything with the 'token' class
-        document.getElementById('mapSelect').value = ""; // Resets dropdown
-        updateMap(); // Clears background
+        clearTokens('token');
+        document.getElementById('mapSelect').value = "";
+        updateMap();
     }
-
 </script>
 </body>
 </html>
